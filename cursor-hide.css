@@ -1,0 +1,127 @@
+/* Global Cursor Hiding Styles */
+/* This file ensures the default cursor is hidden across all pages */
+
+/* Universal cursor hiding */
+* {
+    cursor: none !important;
+}
+
+/* All interactive states */
+*:hover,
+*:active,
+*:focus {
+    cursor: none !important;
+}
+
+/* HTML and body elements */
+html, body {
+    cursor: none !important;
+}
+
+/* All HTML elements explicitly */
+a, button, input, textarea, select, div, span, p, h1, h2, h3, h4, h5, h6,
+img, video, audio, canvas, svg, path, rect, circle, ellipse, line, polygon,
+ul, ol, li, table, tr, td, th, thead, tbody, tfoot, form, label, fieldset,
+legend, article, section, header, footer, nav, aside, main, figure, figcaption,
+details, summary, dialog, menu, menuitem, iframe, embed, object, param {
+    cursor: none !important;
+}
+
+/* Pseudo-elements */
+*::before,
+*::after,
+*::first-letter,
+*::first-line {
+    cursor: none !important;
+}
+
+/* Interactive states */
+:hover,
+:active,
+:focus,
+:visited,
+:link,
+:target {
+    cursor: none !important;
+}
+
+/* Custom cursor classes */
+.pencil-cursor,
+.book-cursor,
+.custom-cursor {
+    cursor: none !important;
+}
+
+/* Allow text cursor ONLY for text inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="url"],
+textarea {
+    cursor: text !important;
+}
+
+/* Override any inline cursor styles */
+[style*="cursor"] {
+    cursor: none !important;
+}
+
+/* Force hide on all elements with !important */
+*[style*="cursor: pointer"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: hand"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: default"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: move"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: grab"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: help"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: wait"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: crosshair"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: progress"] {
+    cursor: none !important;
+}
+
+*[style*="cursor: not-allowed"] {
+    cursor: none !important;
+}
+
+/* Webkit scrollbar styling (optional) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+}

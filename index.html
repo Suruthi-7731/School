@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhaarathi Vidhyalaya</title>
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="school1/css/animations.css">
+  <link rel="stylesheet" href="school1/css/interactive.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+
+
+  <style>
+    /* Custom Book Cursor */
+    body, html {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="%23000000" d="M8 4 L8 28 L24 28 L24 4 Z M10 6 L22 6 L22 26 L10 26 Z M12 8 L20 8 L20 10 L12 10 Z M12 12 L20 12 L20 14 L12 14 Z M12 16 L18 16 L18 18 L12 18 Z"/></svg>'), auto;
+      background-color: #ffffff;
+    }
+    
+    /* Ensure all interactive elements use book cursor */
+    a, button, input, select, textarea, [onclick], .hover-premium, .magnetic-target {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="%23000000" d="M8 4 L8 28 L24 28 L24 4 Z M10 6 L22 6 L22 26 L10 26 Z M12 8 L20 8 L20 10 L12 10 Z M12 12 L20 12 L20 14 L12 14 Z M12 16 L18 16 L18 18 L12 18 Z"/></svg>'), pointer;
+    }
+
+    @layer base, snapping, layout;
+
+    @layer snapping {
+      html {
+        /* scroll-behavior: smooth; -- Removed to avoid conflict with Lenis */
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: 'Roboto', sans-serif;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    .video-bg {
+      display: none;
+    }
+
+    .hero-section {
+      position: relative;
+      width: 100%;
+      max-width: 100vw;
+      height: auto;
+      min-height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    .hero-wrapper {
+      width: 100%;
+      max-width: 100vw;
+      margin: 0;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 100vw;
+      height: auto;
+      display: flex;
+      flex-direction: row;
+      /* desktop: side by side */
+      justify-content: stretch;
+      align-items: stretch;
+      position: relative;
+      z-index: 0;
+    }
+
+    .hero-section .card {
+      position: relative;
+      flex: 0 0 50%;
+      /* each takes half width on desktop */
+      width: 50%;
+      height: auto;
+      min-height: 360px;
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Desktop: make hero cards taller for stronger visual impact */
+    @media (min-width: 1025px) {
+      .hero-section .card {
+        min-height: 660px;
+      }
+    }
+
+    .hero-section .card .slide1 {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 1.2s ease;
+      z-index: 1;
+    }
+
+    .hero-section .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.85));
+      z-index: 1;
+    }
+
+    .hero-section .card:hover .slide1 {
+      transform: scale(1.08);
+    }
+
+    .hero-section .card:hover::after {
+      background: linear-gradient(to bottom, rgba(250, 242, 135, 0.3), rgba(252, 253, 163, 0.719));
+    }
+
+    .hero-section .card .slide2 {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 8%;
+      text-align: center;
+      gap: 14px;
+      height: 100%;
+    }
+
+    .hero-logo-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 2px solid #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+
+    .hero-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .hero-split-title1 {
+      color: #84009e;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      line-height: 1.25;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      text-shadow: 
+        -1px -1px 0 #ffd4a4,
+        1px -1px 0 #ffd4a4,
+        -1px 1px 0 #ffd4a4,
+        1px 1px 0 #ffd4a4,
+        0 0 3px #ffd4a4,
+        0 0 5px #ffd4a4;
+    }
+
+     .hero-split-title2 {
+      color: #15008a;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      line-height: 1.25;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      text-shadow: 
+        -1px -1px 0 #fffec9,
+        1px -1px 0 #fffec8,
+        -1px 1px 0 #fffebd,
+        1px 1px 0 #fffeca,
+        0 0 3px #fffece,
+        0 0 5px #fffecf;
+    }
+
+    .hero-split-subtitle {
+      color: rgba(250, 250, 250, 0.9);
+      font-size: 0.95rem;
+      max-width: 420px;
+    }
+
+    .hero-split-cta {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 30px;
+      border-radius: 999px;
+      border: 1.5px solid #facc15;
+      background: transparent;
+      color: #facc15;
+      font-size: 0.9rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.0);
+      
+    }
+
+    .hero-split-cta:hover {
+      background: #facc15;
+      color: #111827;
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.35);
+      
+      transform: translateY(-2px);
+    }
+
+    /* --- ADVANCED INTERACTIONS CSS --- */
+
+    /* Custom Scroll Progress Bar */
+    .scroll-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      z-index: 2000;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .scroll-progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, #facc15, #f59e0b);
+      width: 0%;
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+      transition: width 0.1s ease-out;
+    }
+
+    /* Header Scrolled State */
+    header.scrolled {
+      background: transparent;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    /* SVG Drawing Line */
+    .scroll-line-container {
+      position: fixed;
+      right: 5%;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .scroll-line-svg {
+      height: 100%;
+      width: 100%;
+    }
+
+    .scroll-line-path {
+      stroke: #facc15;
+      stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      opacity: 0.4;
+    }
+
+    /* Staggered Card Animation Base */
+    .why-card,
+    .testi-card {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .why-card.active,
+    .testi-card.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Horizontal card numbers */
+    .card .face2 {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      font-size: 4em;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.5);
+      transition: opacity 0.3s;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .card:hover .face2 {
+      opacity: 0;
+    }
+
+
+    @media (max-width: 1280px) {
+      .hero-section {
+        height: auto;
+        min-height: auto;
+      }
+
+      .container {
+        height: auto;
+        flex-direction: column;
+      }
+
+      .hero-section .card {
+        flex: 1 1 auto;
+        width: 100%;
+
+        height: auto;
+        min-height: 320px;
+      }
+
+      .hero-choose-pill {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        height: auto;
+        min-height: auto;
+      }
+
+      .container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-section .card {
+        flex: 1 1 auto;
+        width: 100%;
+        height: auto;
+        min-height: 260px;
+      }
+
+      .hero-section .card .slide2 {
+        padding: 40px 8%;
+      }
+
+      .hero-split-title {
+        font-size: 1.8rem;
+      }
+
+      .hero-split-subtitle {
+        font-size: 0.85rem;
+      }
+    }
+
+ 
+
+    a {
+      text-decoration: none;
+      font-size: 25px;
+      color: #ffffff;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #facc15;
+    }
+
+    /* MARQUEE STYLES */
+    .marquee-wrapper {
+      overflow: hidden;
+      width: 100%;
+      mask-image: linear-gradient(to right, transparent, rgb(221, 192, 113) 10%, rgba(224, 204, 136, 0.747) 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, rgba(219, 201, 123, 0.801) 10%, rgba(192, 190, 86, 0.733) 90%, transparent);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 30px;
+      width: max-content;
+      animation: marquee-scroll 30s linear infinite;
+      padding: 20px 0;
+      /* Space for shadows */
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee-scroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Main Navigation */
+    /* Main Navigation */
+    .main-nav {
+      position: fixed;
+      /* Fixes navbar at the top */
+      top: 0;
+      /* Aligns to top */
+      left: 0;
+      /* Aligns left edge */
+      width: 100%;
+      /* Full width */
+      z-index: 1000;
+      /* Keeps it above other content */
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      /* Glass effect */
+      background: rgba(255, 255, 255, 0.1);
+      /* semi-transparent */
+      backdrop-filter: blur(2px);
+      /* blurs whatever is behind */
+      -webkit-backdrop-filter: blur(3px);
+      /* for Safari */
+      border: 0.5px solid rgba(255, 255, 255, 0.3);
+      /* subtle border */
+      padding: 2px 20px;
+      /* optional padding */
+    }
+
+
+    .main-nav:hover .nav-link-animate {
+      color: #333;
+      /* Turn others grey when hovering container */
+    }
+
+    /* Menu Item Hover Animation */
+    .nav-link-animate {
+      position: relative;
+      padding: 10px 30px;
+      font-family: Arial;
+      font-size: 17px;
+      color: black;
+      /* Default Black */
+      font-weight: 570;
+      z-index: 1;
+      /* Light transparent background */
+      overflow: hidden;
+      border-radius: 20px;
+      transition: color 0.3s ease;
+      /* Rounded corners */
+      text-shadow: 
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff,
+        0 0 2px #fff,
+        0 0 3px #fff;
+    }
+
+    .nav-link-animate::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      /* Blue fill for contrast */
+      z-index: -1;
+      transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .nav-link-animate:hover::before {
+      width: 100%;
+    }
+
+    .nav-link-animate:hover {
+      border-color: #ff4757;
+      color: #caac02 !important;
+      /* Force White on hover */
+    }
+
+    /* About Section */
+    .about-section-styled {
+      padding: 60px 20px;
+      background: #ffffff;
+      text-align: left;
+    }
+
+
+    /* Moving Letters ml15 Animation */
+    .ml15 {
+      font-weight: 800;
+      font-size: 3.5em;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #0376f2;
+      display: flex;
+      justify-content: center;
+      gap: 0.5em;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .ml15 .word {
+      display: inline-block;
+      line-height: 1em;
+    }
+
+
+    /* ---------- IMAGE TEXT OVERLAY ---------- */
+    .slide1 {
+      position: relative;
+    }
+
+    .slide1::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 55%, rgba(255, 220, 106, 0.22), transparent 65%);
+    }
+
+    /* Improve text clarity */
+    .slide2 h3 {
+      font-weight: 700;
+    }
+
+    @media (max-width: 480px) {
+      .hero-section {
+        height: auto;
+        min-height: auto;
+      }
+
+      .container {
+        padding: 0;
+        gap: 0;
+        min-height: auto;
+        flex-direction: column;
+      }
+
+      .hero-section .card {
+        width: 100%;
+        max-width: none;
+        height: auto;
+        min-height: 240px;
+        margin: 0;
+      }
+
+      .hero-section .card .slide2 {
+        padding: 30px 7%;
+      }
+
+      .hero-logo-circle {
+        width: 90px;
+        height: 90px;
+        font-size: 1.4rem;
+      }
+
+      .hero-split-title {
+        font-size: 1.5rem;
+      }
+
+      .hero-split-subtitle {
+        font-size: 0.8rem;
+      }
+
+      .hero-choose-pill {
+        display: none;
+      }
+    }
+
+    /* WHY CHOOSE US */
+    .why-section {
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #dee3ea, #f6f2d1);
+    }
+
+    .why-container {
+      max-width: 1200px;
+      margin: auto;
+      text-align: center;
+    }
+
+    /* TITLE */
+    .why-title {
+      font-size: 36px;
+      margin-bottom: 15px;
+      animation: fadeDown 1s ease forwards;
+    }
+
+    .why-title span {
+      color: #84780c;
+    }
+
+    .why-subtitle {
+      max-width: 750px;
+      margin: auto;
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 30px;
+      animation: fadeUp 1.2s ease forwards;
+    }
+
+    /* CARDS */
+    .why-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 35px;
+    }
+
+    /* INDIVIDUAL CARD */
+    .why-card {
+      background: #ffffff;
+      padding: 40px 25px;
+      border-radius: 18px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      transition: all 0.4s ease;
+      animation: slideUp 1s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ICON */
+    .why-card i {
+      font-size: 44px;
+      color: #f6ff00;
+      margin-bottom: 20px;
+      display: inline-block;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    /* TEXT */
+    .why-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #111;
+    }
+
+    .why-card p {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    /* HOVER EFFECTS */
+    .why-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 25px 55px rgba(3, 118, 242, 0.25);
+    }
+
+    .why-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(3, 118, 242, 0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .why-card:hover::after {
+      opacity: 1;
+    }
+
+    /* ANIMATIONS */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatIcon {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .about-section-styled {
+        text-align: left;
+      }
+
+      .why-title {
+        font-size: 28px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .social-links {
+        justify-content: center;
+      }
+
+      .why-cards {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .main-nav {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .hero-content {
+        text-align: center;
+        padding: 40px 20px;
+      }
+    }
+
+
+    /* Removed grid for marquee */
+
+    /* MAIN FOOTER */
+    .main-footer {
+      background: #111;
+      color: #fff;
+      padding: 60px 10% 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 50px;
+      margin-bottom: 50px;
+    }
+
+    .footer-col h2 {
+      color: #facc15;
+      font-size: 24px;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+
+    .footer-col p {
+      color: #ccc;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 12px;
+    }
+
+    .footer-col ul li a {
+      color: #ccc;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .footer-col ul li a:hover {
+      color: #facc15;
+      padding-left: 8px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+
+    .social-links a:hover {
+      background: #f3e3a3;
+      color: #111;
+      transform: translateY(-5px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 25px;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+    }
+
+    /* MOBILE HEADER STYLES */
+    .mobile-only {
+      display: none;
+    }
+
+    /* Desktop Defaults */
+    header.main-header {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      z-index: 100;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-only {
+        display: block;
+      }
+
+      header.main-header {
+        justify-content: space-between;
+        backdrop-filter: blur(3px);
+        background: rgba(204, 202, 202, 0);
+        -webkit-backdrop-filter: blur(3px);
+        border: 0.5px solid rgba(167, 164, 164, 0);
+        padding: 10px 20px;
+        transform: translateY(-10px);
+        min-height: 60px;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #000000;
+        font-weight: 700;
+        font-size: clamp(0.8rem, 2.5vw, 1rem);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow: none;
+        text-align: center;
+        width: 60%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+      }
+
+      .mobile-toggle {
+        font-size: 24px;
+        color: #000000;
+        cursor: pointer;
+        z-index: 50;
+        margin-left: auto;
+        /* Push to right */
+      }
+
+      /* Mobile Menu Dropdown */
+      .main-nav {
+        display: none;
+        /* Hidden */
+        position: absolute;
+        right: 0;
+        width: 250px;
+         background: rgba(34, 30, 30, 0.1);
+      /* semi-transparent */
+      backdrop-filter: blur(2px);
+      /* blurs whatever is behind */
+      -webkit-backdrop-filter: blur(3px);
+      /* for Safari */
+      border: 0.5px solid rgba(117, 114, 114, 0.3);
+      /* subtle border */
+        flex-direction: column;
+        
+        border-radius: 0 0 0 15px;
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+
+    #founder img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px;
+    }
+
+    /* Founder & Vision: center content on mobile */
+    @media (max-width: 768px) {
+
+      /* Stack the two columns and center their contents */
+      #founder img {
+        width: 95%;
+      }
+
+      #founder>div {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+      }
+
+      /* Make each panel take full width and center text */
+      #founder>div>div {
+        min-width: unset;
+        width: 100%;
+        padding: 10px 15px;
+        box-sizing: border-box;
+      }
+
+      /* Right side (content) should center its text and items */
+      #founder>div>div:nth-child(2) {
+        text-align: left;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Left side (image/quote) center elements */
+      #founder>div>div:nth-child(1) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+      }
+
+      /* Ensure the check rows center their items */
+      #founder>div>div:nth-child(2)>div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #founder img {
+        width: 95%;
+      }
+    }
+
+    /* Keep Founder image panel above text on tablet widths (including 770px) */
+    @media (max-width: 900px) {
+      #founder>div {
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+
+      #founder>div>div:nth-child(1),
+      #founder>div>div:nth-child(2) {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      #founder>div>div:nth-child(2) {
+        padding: 28px 20px !important;
+      }
+    }
+
+    /* Tablet Specific Styles */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      header.main-header {
+        justify-content: space-between;
+        backdrop-filter: blur(3px);
+        background: rgba(204, 202, 202, 0);
+        -webkit-backdrop-filter: blur(3px);
+        border: 0.5px solid rgba(167, 164, 164, 0);
+        padding: 15px 30px;
+        transform: translateY(-10px);
+        min-height: 70px;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #000000;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: none;
+        text-align: center;
+        width: 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+      }
+
+      .mobile-toggle {
+        font-size: 28px;
+        color: #000000;
+        cursor: pointer;
+        z-index: 50;
+        margin-left: auto;
+      }
+
+      .main-nav.active {
+        display: flex;
+      }
+
+      .main-nav a {
+        padding: 10px;
+        background: transparent;
+        backdrop-filter: none;
+        color: #bdac17 !important;
+      }
+    }
+
+    /* Container */
+    .about-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 60px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Left Images */
+    .about-images {
+      flex: 1;
+      min-width: 300px;
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      min-height: 460px;
+      margin: 0 auto;
+    }
+
+    .about-images img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Right Content */
+    .about-content {
+      flex: 1;
+      min-width: 300px;
+      /* reduced from 600 */
+    }
+
+    /* ===================== */
+    /* MOBILE RESPONSIVE */
+    /* ===================== */
+
+    @media (max-width: 992px) {
+
+      .about-container {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      #about>div {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 36px !important;
+      }
+
+      .about-images {
+        max-width: 520px;
+        min-height: 500px;
+      }
+
+      .about-content {
+        min-width: 0;
+        width: 100%;
+        max-width: 760px;
+      }
+
+      .about-content h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.28 !important;
+      }
+
+      .theme-hero-text {
+        font-size: 2.2rem !important;
+      }
+
+    }
+
+    @media (max-width: 768px) {
+
+      .about-section {
+        padding: 60px 15px !important;
+      }
+
+      #about>div {
+        gap: 28px !important;
+        align-items: center !important;
+      }
+
+      .about-images {
+        min-width: 0;
+        min-height: 0;
+        max-width: 420px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+        gap: 14px;
+      }
+
+      .about-images>div {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1;
+      }
+
+      .about-images>div:nth-child(5) {
+        display: none;
+      }
+
+      .about-content {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .theme-hero-text {
+        font-size: 1.8rem !important;
+        line-height: 1.3;
+      }
+
+      .about-content p {
+        font-size: 0.95rem;
+      }
+
+    }
+
+    .reel-testimonials {
+      padding: 10px 20px;
+      background: #f9f9f9;
+      text-align: center;
+    }
+
+    .reel-testimonials h2 {
+      font-size: 40px;
+      color: rgb(0, 0, 0);
+      margin-bottom: 10px;
+    }
+
+    .reels-wrapper {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 20px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #facc15 transparent;
+    }
+
+    .reels-wrapper::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .reels-wrapper::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .reels-wrapper::-webkit-scrollbar-thumb {
+      background-color: #facc15;
+      border-radius: 10px;
+    }
+
+    .reel-card {
+      background: #ffffff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      flex: 0 0 clamp(220px, 28vw, 360px);
+      scroll-snap-align: start;
+    }
+
+    .reel-card video {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    .reel-caption {
+      padding: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      color: #9ba104;
+    }
+
+
+    @media (max-width: 768px) {
+
+      .reel-testimonials {
+        padding: 30px 10px;
+        text-align: left;
+      }
+
+      .reel-testimonials h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        padding-left: 5px;
+      }
+
+      .reels-wrapper {
+        gap: 12px;
+      }
+
+      .reel-card {
+        min-width: 220px;
+        height: 280px;
+        flex-shrink: 0;
+      }
+
+      .reel-card video {
+        height: 100%;
+      }
+
+      .reel-caption {
+        font-size: 12px;
+        padding: 6px;
+      }
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <script src="scroll-animations.js" defer></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+  <script src="js/vanilla-tilt.js"></script>
+  <script src="js/video-carousel.js"></script>
+  <script src="js/book-cursor.js"></script>
+  <script src="../js/counter.js"></script>
+
+
+  <link rel='stylesheet' href='mobile-fixes.css'>
+  <link rel='stylesheet' href='cursor-hide.css'>
+</head>
+
+<body>
+
+  <main>
+    <!-- Scroll Progress and SVG Line -->
+    <div class="scroll-progress-container">
+      <div class="scroll-progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="scroll-line-container">
+      <svg class="scroll-line-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+        <path id="scrollPath" class="scroll-line-path" d="M 50 0 C 50 200, 90 300, 50 500 C 10 700, 50 800, 50 1000">
+        </path>
+      </svg>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" style="position: relative; overflow: hidden;">
+      <!-- Floating Book and Pencil Icons in Hero -->
+      <div class="floating" style="position: absolute; top: 15%; left: 8%; font-size: 3rem; color: #000000; opacity: 0.08; transform: rotate(-15deg); z-index: 0;">
+        <i class="fa fa-book"></i>
+      </div>
+      <div class="floating-delayed" style="position: absolute; top: 25%; right: 10%; font-size: 2.5rem; color: #fbbf24; opacity: 0.12; transform: rotate(20deg); z-index: 0;">
+        <i class="fa fa-pencil"></i>
+      </div>
+      <div class="floating" style="position: absolute; top: 65%; left: 6%; font-size: 2.8rem; color: #fbbf24; opacity: 0.09; transform: rotate(35deg); z-index: 0;">
+        <i class="fa fa-book"></i>
+      </div>
+      <div class="floating-delayed" style="position: absolute; top: 75%; right: 8%; font-size: 2.2rem; color: #000000; opacity: 0.07; transform: rotate(-30deg); z-index: 0;">
+        <i class="fa fa-pencil"></i>
+      </div>
+      
+      <div class="hero-wrapper reveal reveal-up active" style="position: relative; z-index: 1;">
+        <header class="main-header">
+          <!-- Mobile Logo (Centered) -->
+          <div class="logo mobile-only">Bhaarathi Vidhyalaya</div>
+
+          <!-- Mobile Toggle (Right) -->
+          <div class="mobile-toggle mobile-only" id="mobileMenuBtn">
+            <i class="fa fa-bars"></i>
+          </div>
+
+          <nav class="main-nav" id="mainNav">
+            <a href="#" class="nav-link-animate magnetic-target">HOME</a>
+            <a href="#campus-showcase" class="nav-link-animate magnetic-target">TESTIMONIALS</a>
+            <a href="#about" class="nav-link-animate magnetic-target">ABOUT US</a>
+            <a href="#why-choose-us" class="nav-link-animate magnetic-target">WHY CHOOSE US</a>
+            <a href="#founder" class="nav-link-animate magnetic-target">FOUNDER'S STORY</a>
+          </nav>
+        </header>
+
+        <div class="container reveal reveal-up">
+          <div class="card hover-premium magnetic-target" onclick="location.href='school1/index.html'" data-tilt>
+            <div class="slide1" style="background-image: url('school1/img/school2.JPG');"></div>
+            <div class="slide2">
+              <div class="hero-logo-circle">
+                <img src="school1/img/logo.png" alt="Bharathi Vidhyaa Kendra Logo" class="hero-logo-img">
+              </div>
+              <h2 class="hero-split-title1">Bharathi Vidhyaa<br> Kendra</h2>
+              <button class="hero-split-cta">Explore</button>
+            </div>
+          </div>
+          <div class="card hover-premium magnetic-target" onclick="location.href='school2/index.html'" data-tilt>
+            <div class="slide1" style="background-image: url('infra.png');"></div>
+            <div class="slide2">
+              <div class="hero-logo-circle">
+                <img src="school2/img/logo2.png" alt="Bharathi Kids Kshethralaya Logo" class="hero-logo-img">
+              </div>
+              <h2 class="hero-split-title2">Bharathi Kids <br>Kshethralaya</h2>
+              <button class="hero-split-cta">Explore</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <section id="campus-showcase" class="campus-section fadeInUp" style="background-color: #f9f9f9; padding: 20px 40px; position: relative; overflow: hidden;">
+        <!-- Floating Book and Pencil Icons in Testimonials -->
+        <div class="floating" style="position: absolute; top: 10%; left: 5%; font-size: 2.2rem; color: #000000; opacity: 0.06; transform: rotate(-25deg); z-index: 0;">
+          <i class="fa fa-book"></i>
+        </div>
+        <div class="floating-delayed" style="position: absolute; top: 20%; right: 8%; font-size: 2.6rem; color: #fbbf24; opacity: 0.08; transform: rotate(18deg); z-index: 0;">
+          <i class="fa fa-pencil"></i>
+        </div>
+        <div class="floating" style="position: absolute; bottom: 15%; left: 6%; font-size: 2.1rem; color: #fbbf24; opacity: 0.07; transform: rotate(40deg); z-index: 0;">
+          <i class="fa fa-book"></i>
+        </div>
+        <div class="floating-delayed" style="position: absolute; bottom: 10%; right: 8%; font-size: 2.4rem; color: #000000; opacity: 0.05; transform: rotate(-35deg); z-index: 0;">
+          <i class="fa fa-pencil"></i>
+        </div>
+        
+        <div class="section-header" style="position: relative; z-index: 1;">
+            <h2>Our Testimonials</h2>
+            <p>Experience the life at Bharathi Schools through our students and Parents eyes</p>
+        </div>
+
+        <div class="stories-container">
+            <div class="stories-scroll">
+                <!-- Video Card 1 -->
+                <div class="story-card" data-index="0">
+                    <video class="story-video" playsinline muted loop>
+                        <source src="school1/videos/testi2.mp4" type="video/mp4">
+                    </video>
+                    <div class="story-overlay">
+                        <button class="unmute-btn">UNMUTE 🔊</button>
+                    </div>
+                </div>
+
+                <!-- Video Card 2 -->
+                <div class="story-card" data-index="1">
+                    <video class="story-video" playsinline muted loop>
+                        <source src="school1/videos/testi1.mp4" type="video/mp4">
+                    </video>
+                    <div class="story-overlay">
+                        <button class="unmute-btn">UNMUTE 🔊</button>
+                    </div>
+                </div>
+
+                <!-- Video Card 3 -->
+                  <div class="story-card" data-index="6">
+                    <video class="story-video" playsinline muted loop>
+                        <source src="school2/videos/testi3.mp4" type="video/mp4">
+                    </video>
+                    <div class="story-overlay">
+                        <button class="unmute-btn">UNMUTE 🔊</button>
+                    </div>
+                </div>
+
+                <!-- Video Card 4 -->
+                <div class="story-card" data-index="3">
+                    <video class="story-video" playsinline muted loop>
+                        <source src="school2/videos/testi2.mp4" type="video/mp4">
+                    </video>
+                    <div class="story-overlay">
+                        <button class="unmute-btn">UNMUTE 🔊</button>
+                    </div>
+                </div>
+
+                <!-- Video Card 5 -->
+                <div class="story-card" data-index="4">
+                    <video class="story-video" playsinline muted loop>
+                        <source src="school1/videos/testi4.mp4" type="video/mp4">
+                    </video>
+                    <div class="story-overlay">
+                        <button class="unmute-btn">UNMUTE 🔊</button>
+                    </div>
+                </div>
+
+                <!-- Video Card 6 -->
+                <div class="story-card" data-index="5">
+                    <video class="story-video" playsinline muted loop>
+                        <source src="school2/videos/testi1.mp4" type="video/mp4">
+                    </video>
+                    <div class="story-overlay">
+                        <button class="unmute-btn">UNMUTE 🔊</button>
+                    </div>
+                </div>
+
+                <!-- Video Card 7 -->
+                  <div class="story-card" data-index="2">
+                    <video class="story-video" playsinline muted loop>
+                        <source src="school1/videos/testi3.mp4" type="video/mp4">
+                    </video>
+                    <div class="story-overlay">
+                        <button class="unmute-btn">UNMUTE 🔊</button>
+                    </div>
+                </div>
+             
+            </div>
+
+            <div class="stories-progress-container">
+                <div id="stories-track" class="stories-track"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="about-section reveal about-section-styled"
+      style="background: #f5f5f5; padding: 50px 10px; position: relative; overflow: hidden;">
+      
+      <!-- Floating Book and Pencil Icons -->
+      <div class="floating" style="position: absolute; top: 10%; left: 5%; font-size: 2.5rem; color: #000000; opacity: 0.1; transform: rotate(-20deg); z-index: 0;">
+        <i class="fa fa-book"></i>
+      </div>
+      <div class="floating-delayed" style="position: absolute; top: 15%; right: 8%; font-size: 2rem; color: #fbbf24; opacity: 0.15; transform: rotate(15deg); z-index: 0;">
+        <i class="fa fa-pencil"></i>
+      </div>
+      <div class="floating" style="position: absolute; top: 60%; left: 8%; font-size: 2.8rem; color: #fbbf24; opacity: 0.12; transform: rotate(30deg); z-index: 0;">
+        <i class="fa fa-book"></i>
+      </div>
+      <div class="floating-delayed" style="position: absolute; top: 70%; right: 6%; font-size: 2.2rem; color: #000000; opacity: 0.08; transform: rotate(-25deg); z-index: 0;">
+        <i class="fa fa-pencil"></i>
+      </div>
+      <div class="floating" style="position: absolute; top: 35%; left: 12%; font-size: 1.8rem; color: #000000; opacity: 0.1; transform: rotate(45deg); z-index: 0;">
+        <i class="fa fa-book"></i>
+      </div>
+      <div class="floating-delayed" style="position: absolute; top: 45%; right: 15%; font-size: 2.4rem; color: #fbbf24; opacity: 0.14; transform: rotate(-35deg); z-index: 0;">
+        <i class="fa fa-pencil"></i>
+      </div>
+      
+      <div style="max-width: 1100px; margin: 0 auto; display: flex; gap: 60px; align-items: center; flex-wrap: wrap; position: relative; z-index: 1;">
+
+        <!-- Left Side: Image Collage -->
+        <div class="about-images">
+          <!-- Top Row -->
+          <div style="display: flex; gap: 15px; margin-bottom: 20px; justify-content: center;">
+            <div
+              style="width: 200px; height: 200px; background-image: url('school1/img/ach1.png'); background-size: cover; background-position: center; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); transition: transform 0.3s ease;">
+            </div>
+            <div
+              style="width: 200px; height: 200px; background-image: url('school2/img/infra.jpeg'); background-size: cover; background-position: center; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); transition: transform 0.3s ease;">
+            </div>
+          </div>
+          
+          <!-- Bottom Row -->
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <div
+              style="width: 200px; height: 200px; background-image: url('school1/img/school2.JPG'); background-size: cover; background-position: center; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); transition: transform 0.3s ease;">
+            </div>
+            <div
+              style="width: 200px; height: 200px; background-image: url('school1/img/green.png'); background-size: cover; background-position: center; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); transition: transform 0.3s ease;">
+            </div>
+          </div>
+          
+          <!-- Background shape -->
+          <div
+            style="position: absolute; top: -30px; left: -30px; width: 250px; height: 250px; background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%); border-radius: 50%; opacity: 0.15; z-index: -1;">
+          </div>
+        </div>
+
+        <!-- Right Side: Content -->
+        <div class="about-content">
+          <div style="color: #fbbf24; font-size: 0.90rem; font-weight: 600; letter-spacing: 1px;">
+            ABOUT US</div>
+
+          <h1 style="font-size: 3.2rem; font-weight: 800; margin: 0 0 15px 0; line-height: 1.2;"
+            class="theme-hero-text">
+            Founded on a powerful belief education transforms lives
+          </h1>
+
+          <p>
+            The Bhaarathi Group of schools began its journey from the humblest of beginnings. Established by its
+            Correspondent with a founding strength of just two students, the institution was nurtured with dedication,
+            resilience and an unwavering sense of purpose.
+          </p>
+
+          <div style="margin-bottom: 10px;">
+            <div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
+              <i class="fa fa-check" style="color: #fbbf24; margin-top: 5px; font-weight: bold;"></i>
+              <span style="color: #555; font-size: 1rem;">Over the past 25 years, this modest beginning has blossomed
+                into two flourishing institutions</span>
+            </div>
+            <div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
+              <i class="fa fa-check" style="color: #fbbf24; margin-top: 5px; font-weight: bold;"></i>
+              <span style="color: #555; font-size: 1rem;">Operating under the Bhaarathi banner with excellence at the
+                heart</span>
+            </div>
+            <div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
+              <i class="fa fa-check" style="color: #fbbf24; margin-top: 5px; font-weight: bold;"></i>
+              <span style="color: #555; font-size: 1rem;">Steadily growing in strength while remaining rooted in
+                values</span>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="fa fa-check" style="color: #fbbf24; margin-top: 5px; font-weight: bold;"></i>
+              <span style="color: #555; font-size: 1rem;">Placing learning, character and excellence at the heart of
+                education</span>
+            </div>
+          </div>
+
+          <!-- Quote Section -->
+          <div
+            style="background: white; padding: 20px; border-left: 4px solid #fbbf24; border-radius: 5px; margin-top: 30px;">
+            <p style="font-style: italic; color: #333; margin: 0 0 15px 0; font-size: 1.05rem; line-height: 1.6;">
+              "A symbol of vision realised — steadily growing in strength while remaining rooted in values that place
+              learning, character and excellence at the heart of education."
+            </p>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div
+                style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; background-image: url('founder.jpeg'); background-size: cover; background-position: center;">
+              </div>
+              <div>
+                <p style="color: #1a1a1a; font-weight: 600; margin: 0; font-size: 0.95rem;">Bhaarathi Group</p>
+                <p style="color: #999; font-size: 0.85rem; margin: 0;">FOUNDING VISION</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- Why Choose Us Section -->
+    <section id="why-choose-us" class="why-section reveal-blur"
+      style="background: #ffffff; padding: 30px 20px; position: relative; overflow: hidden;">
+      <!-- Floating Decorations -->
+      <div class="floating"
+        style="position: absolute; top: 10%; left: 5%; font-size: 4rem; color: #fbbf24; opacity: 0.15; pointer-events: none;">
+        <i class="fa fa-graduation-cap"></i>
+      </div>
+      <div class="floating-delayed"
+        style="position: absolute; bottom: 15%; right: 7%; font-size: 4rem; color: #fbbf24; opacity: 0.15; pointer-events: none;">
+        <i class="fa fa-pencil"></i>
+      </div>
+
+      <!-- Yellow decorative shape on right -->
+      <div
+        style="position: absolute; top: -100px; right: -200px; width: 600px; height: 600px; background: #fbbf24; border-radius: 50%; opacity: 0.1; z-index: 0;">
+      </div>
+
+      <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;">
+        <!-- Heading -->
+        <h1 style="font-size: 2.8rem; font-weight: 900; color: #1a1a1a; margin: 0 0 80px 0;">Why Choose Us?</h1>
+
+        <!-- Circular Cards Container -->
+        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Mobile: Horizontal layout -->
+        <style>
+          @media (max-width: 768px) {
+            div[style*="justify-content: center"] {
+              flex-direction: row !important;
+              flex-wrap: wrap !important;
+            }
+          }
+        </style>
+
+          <!-- Circle 1 -->
+          <div style="position: relative; width: 200px; height: 200px; flex-shrink: 0;" class="circle-hover reveal-blur">
+            <!-- Outer circle border -->
+            <div
+              style="position: absolute; width: 100%; height: 100%; border: 8px solid #2d2d2d; border-radius: 50%; background: #fef8e8;">
+              <!-- Yellow accent on top -->
+              <div
+                style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 8px; background: #fbbf24; border-radius: 4px;">
+              </div>
+            </div>
+            <!-- Icon bubble -->
+            <div
+              style="position: absolute; top: -20px; left: 20px; width: 50px; height: 50px; background: white; border: 4px solid #2d2d2d; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">
+              <i class="fa fa-pencil" style="font-size: 1.5rem; color: #fbbf24;"></i>
+            </div>
+            <!-- Content -->
+            <div
+              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; z-index: 5;">
+              <h3 style="color: #2d2d2d; font-size: 0.8rem; font-weight: 700; margin: 0 0 6px 0;">Quality
+                Education</h3>
+              <p style="color: #666; font-size: 0.7rem; line-height: 1.4; margin: 0;">Comprehensive curriculum with modern teaching methods</p>
+            </div>
+          </div>
+
+          <!-- Circle 2 (now first) -->
+          <div style="position: relative; width: 200px; height: 200px; flex-shrink: 0;" class="circle-hover reveal-blur delay-200">
+            <!-- Outer circle border -->
+            <div
+              style="position: absolute; width: 100%; height: 100%; border: 8px solid #2d2d2d; border-radius: 50%; background: #fef8e8;">
+              <!-- Yellow accent on top -->
+              <div
+                style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 8px; background: #fbbf24; border-radius: 4px;">
+              </div>
+            </div>
+
+            <!-- Icon bubble -->
+            <div
+              style="position: absolute; top: -20px; left: 20px; width: 50px; height: 50px; background: white; border: 4px solid #2d2d2d; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">
+              <i class="fa fa-book"style="font-size: 1.5rem; color: #fbbf24;"></i>
+            </div>
+
+            <!-- Content -->
+            <div
+              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; z-index: 5;">
+              <h3 style="color: #2d2d2d; font-size: 0.8rem; font-weight: 700; margin: 0 0 6px 0;">Innovative
+                Teaching</h3>
+              <p style="color: #666; font-size: 0.7rem; line-height: 1.4; margin: 0;">Modern teaching techniques for engaging learning</p>
+            </div>
+          </div>
+
+          <!-- Circle 3 -->
+          <div style="position: relative; width: 200px; height: 200px; flex-shrink: 0;" class="circle-hover reveal-blur delay-300">
+            <!-- Outer circle border -->
+            <div
+              style="position: absolute; width: 100%; height: 100%; border: 8px solid #2d2d2d; border-radius: 50%; background: #fef8e8;">
+              <!-- Yellow accent on top -->
+              <div
+                style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 8px; background: #fbbf24; border-radius: 4px;">
+              </div>
+            </div>
+
+            <!-- Icon bubble -->
+            <div
+              style="position: absolute; top: -20px; left: 20px; width: 50px; height: 50px; background: white; border: 4px solid #2d2d2d; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 14L9 21L9 7L12 11L15 7L15 21L12 14Z" fill="#fbbf24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 14L9 7M12 14L15 7" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="9" cy="21" r="1" fill="#fbbf24"/>
+                <circle cx="15" cy="21" r="1" fill="#fbbf24"/>
+              </svg>
+            </div>
+
+            <!-- Content -->
+            <div
+              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; z-index: 5;">
+              <h3 style="color: #2d2d2d; font-size: 0.8rem; font-weight: 700; margin: 0 0 6px 0;">Safe & Nurturing
+                Environment</h3>
+              <p style="color: #666; font-size: 0.7rem; line-height: 1.4; margin: 0;">Secure atmosphere where students thrive</p>
+            </div>
+          </div>
+
+          <!-- Circle 4 (now third) -->
+          <div style="position: relative; width: 200px; height: 200px; flex-shrink: 0;" class="circle-hover reveal-blur delay-400">
+            <!-- Outer circle border -->
+            <div
+              style="position: absolute; width: 100%; height: 100%; border: 8px solid #2d2d2d; border-radius: 50%; background: #fef8e8;">
+              <!-- Yellow accent on top -->
+              <div
+                style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 8px; background: #fbbf24; border-radius: 4px;">
+              </div>
+            </div>
+
+            <!-- Icon bubble -->
+            <div
+              style="position: absolute; top: -20px; left: 20px; width: 50px; height: 50px; background: white; border: 4px solid #2d2d2d; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">
+              <i class="fa fa-graduation-cap" style="font-size: 1.5rem; color: #fbbf24;"></i>
+            </div>
+
+            <!-- Content -->
+            <div
+              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; z-index: 5;">
+              <h3 style="color: #2d2d2d; font-size: 0.8rem; font-weight: 700; margin: 0 0 6px 0;">Academic Excellence
+              </h3>
+              <p style="color: #666; font-size: 0.7rem; line-height: 1.4; margin: 0;">Focus on rigor and comprehensive development</p>
+            </div>
+          </div>
+
+          <!-- Circle 5 (now fourth) -->
+          <div style="position: relative; width: 200px; height: 200px; flex-shrink: 0;" class="circle-hover reveal-blur delay-500">
+            <!-- Outer circle border -->
+            <div
+              style="position: absolute; width: 100%; height: 100%; border: 8px solid #2d2d2d; border-radius: 50%; background: #fef8e8;">
+              <!-- Yellow accent on top -->
+              <div
+                style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 8px; background: #fbbf24; border-radius: 4px;">
+              </div>
+            </div>
+
+            <!-- Icon bubble -->
+            <div
+              style="position: absolute; top: -20px; left: 20px; width: 50px; height: 50px; background: white; border: 4px solid #2d2d2d; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 14L9 21L9 7L12 11L15 7L15 21L12 14Z" fill="#fbbf24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 14L9 7M12 14L15 7" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="9" cy="21" r="1" fill="#fbbf24"/>
+                <circle cx="15" cy="21" r="1" fill="#fbbf24"/>
+              </svg>
+            </div>
+
+            <!-- Content -->
+            <div
+              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; z-index: 5;">
+              <h3 style="color: #2d2d2d; font-size: 0.8rem; font-weight: 700; margin: 0 0 6px 0;">Strong Community
+                </h3>
+              <p style="color: #666; font-size: 0.7rem; line-height: 1.4; margin: 0;">Supportive partnership of students, parents, teachers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Founder's Story Section -->
+    <section id="founder" class="about-section reveal-section-right" style="padding: 10px 0px; background: #ffffff;">
+      <div
+        style="max-width: 1200px; margin: 0 auto; display: flex; gap: 0; align-items: flex-start; flex-wrap: wrap; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.1); opacity: 0; animation: fadeInUp 0.8s ease-out 0.2s forwards;">
+
+        <!-- Left Side: Profile Image & Quote -->
+        <div
+          style="flex: 1; min-width: 350px; background: linear-gradient(135deg, #f6f4f4 0%, #faf8f8 100%); padding: 30px 10px 10px 28px; display: flex; flex-direction: column; justify-content: flex-start; gap: 14px; position: relative;">
+
+          <!-- Yellow accent bar -->
+          <div style="position: absolute; top: 0; left: 0; width: 12px; height: 100%; background: #fbbf24;"></div>
+
+          <!-- Profile Image -->
+          <div style="width: 520px;width:100%; background: #ccc; box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin: 0;">
+            <img src="founder.jpeg" style="width: 100%; height: auto; display: block;" alt="Founder">
+          </div>
+
+          <!-- Quote Section -->
+          <div
+            style="background: rgb(255, 254, 254); padding: 10px 10px 3px; border-radius: 5px; border-left: 4px solid #fbbf24;">
+            <div style="color: #fbbf24; font-size: 1.5rem;">
+              <i class="fa fa-quote-left"></i>
+            </div>
+            <p style="color: #ffffff; font-size: 0.95rem; line-height: 1.6; font-style: italic; margin: 0;">
+              "Our mission was never just to build a school, but to build a foundation for life. At our institution, we
+              see every
+              child as a unique seed with the potential to grow into a mighty tree of knowledge and integrity."
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Side: Content -->
+        <div
+          style="flex: 1; min-width: 350px; padding: 60px 50px; display: flex; flex-direction: column; justify-content: center;">
+
+          <!-- Name and Title -->
+          <div>
+            <h2 style="font-size: 2.5rem; color: #1a1a1a; margin: 0 0 5px 0; font-weight: 900;">Founder Vision & Mission
+            </h2>
+
+          </div>
+
+          <!-- Description -->
+          <p style="font-size: 1rem; line-height: 1.8; color: #555;">
+            Founded on a powerful belief that education transforms lives, the Bhaarathi Group of schools began its
+            journey from the humblest of beginnings. Established with a founding strength of just two students, the
+            institution was nurtured with dedication, resilience and an unwavering sense of purpose.
+          </p>
+
+          <!-- Highlights with checkmarks -->
+          <div style="margin-bottom: 25px;">
+            <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: flex-start;">
+              <div
+                style="width: 20px; height: 20px; background: #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
+                <i class="fa fa-check" style="color: white; font-size: 0.8rem; font-weight: bold;"></i>
+              </div>
+              <span style="color: #555; font-size: 0.95rem; line-height: 1.6;">Over 25 years of blossoming into two
+                flourishing institutions under the Bhaarathi banner</span>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: flex-start;">
+              <div
+                style="width: 20px; height: 20px; background: #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
+                <i class="fa fa-check" style="color: white; font-size: 0.8rem; font-weight: bold;"></i>
+              </div>
+              <span style="color: #555; font-size: 0.95rem; line-height: 1.6;">Steadily growing in strength while
+                remaining rooted in values of learning and character</span>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div
+                style="width: 20px; height: 20px; background: #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
+                <i class="fa fa-check" style="color: white; font-size: 0.8rem; font-weight: bold;"></i>
+              </div>
+              <span style="color: #555; font-size: 0.95rem; line-height: 1.6;">Placing learning, character and
+                excellence at the heart of education for every student</span>
+            </div>
+          </div>
+
+          <!-- Additional text -->
+          <p
+            style="font-size: 0.95rem; line-height: 1.7; color: #777; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
+            The vision continues to inspire every educator and administrator to provide quality education with moral
+            values, ensuring that every child who walks through our doors becomes a responsible citizen equipped for
+            life's challenges.
+          </p>
+        </div>
+      </div>
+    </section><br><br>
+
+
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h2>BVK Group</h2>
+        <p>Igniting minds and fostering excellence since 1995. The Bhaarathi Vidhyalaya Group of Institutions is
+          dedicated to providing holistic education and nurturing future leaders through academic rigor and moral
+          values.</p>
+      </div>
+
+      <div class="footer-col">
+        <h2>Quick Links</h2>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#why-choose-us">Why Choose Us</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#founder">Founder's Vision</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h2>Our Campuses</h2>
+        <ul>
+          <li><a href="school1/index.html">Bharathi Vidhyaa Kendra School</a></li>
+          <li><a href="school2/index.html">Bharathi Kids Kshethralaya School</a></li>
+        </ul>
+        <h2 style="margin-top: 30px;">Contact Info</h2>
+        <p>📍 Main Road, Tamil Nadu, India</p>
+        <p>📞 +91 98765 43210</p>
+        <p>✉️ group@bvkschool.com</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Bharathi Vidhyalaya Educational Group. All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script>
+    // Create an observer to trigger animations when headings enter the viewport
+    // Create an observer to trigger animations when headings enter the viewport
+    const headingObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const heading = entry.target;
+        if (entry.isIntersecting) {
+          // Restart animation on scroll
+          anime.timeline({ loop: false })
+            .add({
+              targets: heading.querySelectorAll('.word'),
+              scale: [14, 1],
+              opacity: [0, 1],
+              easing: "easeOutCirc",
+              duration: 800,
+              delay: (el, i) => 800 * i
+            });
+        } else {
+          // Reset opacity when leaving viewport so it can animate again
+          heading.querySelectorAll('.word').forEach(w => w.style.opacity = 0);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    // Initialize observer for all animated headings
+    document.querySelectorAll('.ml15').forEach(h => {
+      // Ensure words are initially invisible
+      h.querySelectorAll('.word').forEach(w => w.style.opacity = 0);
+      headingObserver.observe(h);
+    });
+
+    // --- ADVANCED SCROLL INTERACTIONS ---
+
+    // 1. Initialize Lenis Smooth Scroll
+    const lenis = new Lenis({
+      duration: 0.3,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 2.5,
+      lerp: 0.2, // Higher lerp = faster response
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // 2. Scroll Progress & Header Dynamics & SVG Path
+    const progressBar = document.getElementById('progressBar');
+    const header = document.querySelector('header');
+    const heroWrapper = document.querySelector('.hero-wrapper');
+    const scrollPath = document.getElementById('scrollPath');
+    const pathLength = scrollPath.getTotalLength();
+
+    scrollPath.style.strokeDasharray = pathLength;
+    scrollPath.style.strokeDashoffset = pathLength;
+
+    lenis.on('scroll', (e) => {
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollY / maxScroll) * 100;
+
+      // Update progress bar
+      if (progressBar) {
+        progressBar.style.width = scrollPercent + '%';
+      }
+
+      // Header state
+      if (scrollY > 50) {
+        header.classList.add('scrolled', 'glass');
+      } else {
+        header.classList.remove('scrolled', 'glass');
+      }
+
+      // Hero scale effect
+      if (heroWrapper) {
+        const heroScale = 1 - (scrollY * 0.0003);
+        if (heroScale > 0.8) {
+          heroWrapper.style.transform = `scale(${heroScale})`;
+        }
+      }
+
+      // SVG Path draw
+      if (scrollPath) {
+        const drawLength = pathLength * (scrollY / maxScroll);
+        scrollPath.style.strokeDashoffset = pathLength - drawLength;
+      }
+    });
+
+    // 3. Staggered Card Reveals
+    const staggerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const cards = entry.target.querySelectorAll('.why-card, .testi-card');
+        if (entry.isIntersecting) {
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add('active');
+            }, index * 150);
+          });
+        } else {
+          cards.forEach((card) => {
+            card.classList.remove('active');
+          });
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.why-cards, .reels-wrapper').forEach(grid => {
+      staggerObserver.observe(grid);
+    });
+
+    // 4. Fade-in Observer for numbers and general elements
+    const fadeInObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in-visible');
+          // Trigger 'animated' event for counter logic
+          if (entry.target.hasAttribute('data-count')) {
+            entry.target.dispatchEvent(new CustomEvent('animated'));
+          }
+          fadeInObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+  </script>
+  <script>
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mainNav = document.getElementById('mainNav');
+    const icon = mobileBtn.querySelector('i');
+
+    mobileBtn.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+
+      // Toggle Icon
+      if (mainNav.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+
+    // Close menu when link clicked
+    document.querySelectorAll('.nav-link-animate').forEach(link => {
+      link.addEventListener('click', () => {
+        mainNav.classList.remove('active');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      });
+    });
+
+    // --- extra animations injected ---
+    (function () {
+      // Small safe enhancements appended to the main script: typewriter trigger and premium glint
+      try {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // hero title typewriter (if present)
+        const h = document.querySelector('.hero-title.typewriter');
+        if (h && !prefersReduced) {
+          setTimeout(() => {
+            const text = h.dataset.type || h.textContent.trim();
+            h.textContent = '';
+            const wrap = document.createElement('span'); wrap.className = 'wrap'; h.appendChild(wrap);
+            let i = 0; const tick = () => { if (i <= text.length) { wrap.textContent = text.slice(0, i++); setTimeout(tick, 40 + (i % 6)); } }; tick();
+            h.classList.add('active');
+          }, 300);
+        }
+        // premium-heading glint
+        document.querySelectorAll('.premium-heading').forEach(ph => {
+          if (prefersReduced) return;
+          setInterval(() => { ph.classList.add('glint'); setTimeout(() => ph.classList.remove('glint'), 1000); }, 4800 + Math.random() * 1200);
+        });
+      } catch (e) { }
+    })();
+  </script>
+  <script>
+    // Additional main-page animations: parallax layers, card tilt, marquee pause
+    (function () {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Parallax: elements with .parallax-layer and data-depth (0.1 - 0.6)
+      if (!prefersReduced) {
+        const layers = Array.from(document.querySelectorAll('.parallax-layer'));
+        window.addEventListener('scroll', () => {
+          const scrollY = window.scrollY;
+          layers.forEach(el => {
+            const depth = parseFloat(el.dataset.depth || '0.2');
+            const y = Math.round(scrollY * depth * -0.15);
+            el.style.transform = `translateY(${y}px)`;
+          });
+        }, { passive: true });
+      }
+
+      // Card tilt and glow are now handled by vanilla-tilt.js and hover-premium class.
+
+      // 3. Text highlight animation on scroll
+      const textElements = document.querySelectorAll('h1, h2, h3, p');
+      textElements.forEach((el, index) => {
+        el.style.animation = `fadeInUp 0.6s ease-out ${index * 0.05}s both`;
+      });
+
+      // 4. Pulse effect on interactive elements
+      document.querySelectorAll('button, a, .card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          el.style.animation = 'pulse 0.6s ease-out';
+        });
+      });
+
+      // 5. Smooth counter animation for numbers (removed missing variables)
+      const animateCounter = (element, target, duration = 2000) => {
+        let current = 0;
+        const increment = target / (duration / 16);
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+          } else {
+            element.textContent = Math.floor(current);
+          }
+        }, 16);
+      };
+
+      // Create a simple observer for elements that should fade in
+      const simpleFadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-visible');
+            simpleFadeObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-in-element').forEach(el => {
+        simpleFadeObserver.observe(el);
+      });
+
+      // 6. Parallax scroll effect enhancement
+      if (!prefersReduced) {
+        window.addEventListener('mousemove', (e) => {
+          const x = e.clientX / window.innerWidth;
+          const y = e.clientY / window.innerHeight;
+
+          document.querySelectorAll('[data-parallax]').forEach(el => {
+            const speed = parseFloat(el.dataset.parallax || '0.5');
+            const offsetX = (x - 0.5) * 20 * speed;
+            const offsetY = (y - 0.5) * 20 * speed;
+            el.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+          });
+        });
+      }
+
+      // 7. Dynamic background color change on scroll
+      window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        const hue = (scrollPercent * 3.6) % 360; // Cycle through hue values
+        document.documentElement.style.setProperty('--scroll-hue', hue);
+      }, { passive: true });
+
+    })();
+  </script>
+
+  <style>
+    /* Campus Showcase & Refined Video Carousel (Stories Style) */
+.campus-section {
+    max-width: 1400px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header h2 {
+    font-family: var(--font-heading);
+    color: #fbbf24;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff,
+        0 0 3px #fff,
+        0 0 5px #fff;
+}
+
+.section-header p {
+    color: #666;
+    font-size: 1.1rem;
+    text-shadow: 
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff,
+        0 0 2px #fff,
+        0 0 3px #fff;
+}
+
+.stories-container {
+    position: relative;
+    width: 100%;
+}
+
+.stories-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding: 1rem 0 2rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Hide standard scrollbar */
+    -ms-overflow-style: none;
+}
+
+.stories-scroll::-webkit-scrollbar {
+    display: none;
+    /* Hide standard scrollbar */
+}
+
+.story-card {
+    flex: 0 0 calc(25% - 1.2rem);
+    /* 4 cards visible on desktop */
+    min-width: 280px;
+    aspect-ratio: 9 / 16;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    scroll-snap-align: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.story-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.story-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent 40%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.story-card:hover .story-overlay {
+    opacity: 1;
+}
+
+.unmute-btn {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.unmute-btn:hover {
+    background: white;
+    color: black;
+}
+
+.stories-progress-container {
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.stories-track {
+    position: absolute;
+    height: 100%;
+    background: #fbbf24;
+    width: 0;
+    transition: width 0.1s linear;
+}
+
+@media (max-width: 1024px) {
+    .story-card {
+        flex: 0 0 calc(50% - 1rem);
+    }
+}
+
+@media (max-width: 600px) {
+    .story-card {
+        flex: 0 0 85%;
+    }
+
+    .story-overlay {
+        opacity: 1;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 30%);
+    }
+}
+
+    /* Animation Keyframes */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 5px rgba(100, 150, 255, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(100, 150, 255, 0.6);
+      }
+
+      100% {
+        box-shadow: 0 0 5px rgba(100, 150, 255, 0.3);
+      }
+    }
+
+    /* Fade-in element styles */
+    .fade-in-element {
+      opacity: 0;
+      transition: opacity 0.6s ease-out;
+    }
+
+    .fade-in-element.fade-in-visible {
+      opacity: 1;
+    }
+
+    /* Card enhancements */
+    .card {
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+    }
+
+    /* Smooth transitions for all interactive elements */
+    button,
+    a,
+    .slide1,
+    .slide2 {
+      transition: all 0.3s ease-out;
+    }
+
+    /* Responsive animation reduction */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</body>
+
+
+</html>
+
