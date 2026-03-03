@@ -19,13 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     bookCursor.innerHTML = '📖';
     bookCursor.style.cssText = `
         position: fixed;
-        width: 30px;
-        height: 30px;
-        font-size: 20px;
+        width: 25px;
+        height: 25px;
+        font-size: 16px;
         pointer-events: none;
         z-index: 9999;
-        transition: transform 0.2s ease, opacity 0.3s ease;
         opacity: 0;
+        transition: opacity 0.3s ease;
         transform: translate(-50%, -50%) rotate(0deg);
         filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
     `;
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
             isHovering = true;
             
             // Animate book cursor
-            bookCursor.style.transform = 'translate(-50%, -50%) rotate(15deg) scale(1.2)';
-            bookCursor.style.fontSize = '24px';
+            bookCursor.style.transform = 'translate(-50%, -50%) rotate(15deg) scale(1.1)';
+            bookCursor.style.fontSize = '18px';
             
             // Scale up the card
             card.style.transform = 'scale(1.05) translateY(-5px)';
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Reset book cursor
             bookCursor.style.transform = 'translate(-50%, -50%) rotate(0deg) scale(1)';
-            bookCursor.style.fontSize = '20px';
+            bookCursor.style.fontSize = '16px';
             
             // Reset scale and position
             card.style.transform = 'scale(1) translateY(0)';
@@ -158,14 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Rotate book based on mouse position
             const bookRotation = deltaX * 10 - 5; // -5 to 5 degrees
-            bookCursor.style.transform = `translate(-50%, -50%) rotate(${bookRotation}deg) scale(1.2)`;
+            bookCursor.style.transform = `translate(-50%, -50%) rotate(${bookRotation}deg) scale(1.1)`;
         });
 
         // Click animation with book
         card.addEventListener('click', (e) => {
             // Book opening animation
             bookCursor.innerHTML = '📕';
-            bookCursor.style.transform = 'translate(-50%, -50%) rotate(180deg) scale(1.5)';
+            bookCursor.style.transform = 'translate(-50%, -50%) rotate(180deg) scale(1.3)';
             
             card.style.animation = 'pulse 0.4s ease-out';
             
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.addEventListener('mousedown', (e) => {
                 isDown = true;
-                bookCursor.style.transform = 'translate(-50%, -50%) rotate(45deg) scale(1.3)';
+                bookCursor.style.transform = 'translate(-50%, -50%) rotate(45deg) scale(1.2)';
                 startX = e.pageX - scrollContainer.offsetLeft;
                 scrollLeft = scrollContainer.scrollLeft;
                 e.preventDefault();
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollContainer.scrollLeft = scrollLeft - walk;
                 
                 // Animate book while dragging
-                bookCursor.style.transform = `translate(-50%, -50%) rotate(${45 + Math.sin(Date.now() * 0.01) * 10}deg) scale(1.3)`;
+                bookCursor.style.transform = `translate(-50%, -50%) rotate(${45 + Math.sin(Date.now() * 0.01) * 10}deg) scale(1.2)`;
             });
         });
     }

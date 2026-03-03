@@ -15,9 +15,8 @@
   <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
   <!-- <link rel="stylesheet" href="../fontawesome-free-6.4.2-web/css/all.css"> -->
   <style>
-    /* Custom Book Cursor - Blue and Yellow Theme */
+    /* Custom cursor removed - using book-cursor.js instead */
     html, body {
-      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="%232359b6" d="M8 4 L8 28 L24 28 L24 4 Z M10 6 L22 6 L22 26 L10 26 Z M12 8 L20 8 L20 10 L12 10 Z M12 12 L20 12 L20 14 L12 14 Z M12 16 L18 16 L18 18 L12 18 Z"/></svg>'), auto;
       background-color: #e5e9ff;
       min-height: 100vh;
       display: flex;
@@ -26,11 +25,6 @@
     
     main {
       flex: 1;
-    }
-    
-    /* Ensure all interactive elements use book cursor */
-    a, button, input, select, textarea, [onclick], .hover-premium, .magnetic-target {
-      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="%23f9dc5d" d="M8 4 L8 28 L24 28 L24 4 Z M10 6 L22 6 L22 26 L10 26 Z M12 8 L20 8 L20 10 L12 10 Z M12 12 L20 12 L20 14 L12 14 Z M12 16 L18 16 L18 18 L12 18 Z"/></svg>'), pointer;
     }
 
     .hover-underline {
@@ -640,6 +634,8 @@ color:#031844;
     scrollbar-width: none;
     /* Hide standard scrollbar */
     -ms-overflow-style: none;
+    /* Center videos in desktop view */
+    justify-content: center;
 }
 
 .stories-scroll::-webkit-scrollbar {
@@ -732,6 +728,20 @@ color:#031844;
     .story-card {
         flex: 0 0 calc(50% - 1rem);
     }
+
+    /* Center testimonial videos in desktop view only */
+    @media (min-width: 769px) {
+        .stories-scroll {
+            justify-content: center !important;
+        }
+    }
+
+    /* Keep videos left-aligned in mobile view */
+    @media (max-width: 768px) {
+        .stories-scroll {
+            justify-content: flex-start !important;
+        }
+    }
 }
 
 @media (max-width: 600px) {
@@ -744,11 +754,181 @@ color:#031844;
         background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 30%);
     }
 }
+
+    /* Admissions Popup Modal */
+    .admissions-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .admissions-modal.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .admissions-modal.closing {
+      animation: fadeOut 0.35s ease forwards;
+    }
+
+    .admissions-modal-content {
+      background: linear-gradient(135deg, #2359b6 0%, #1a4a9a 100%);
+      padding: 50px 60px;
+      border-radius: 20px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      color: white;
+      transform-origin: top center;
+    }
+
+    .admissions-modal-content.opening {
+      animation: paperOpen 0.55s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .admissions-modal-content.closing {
+      animation: paperClose 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .admissions-modal-content h2 {
+      font-size: 2.5rem;
+      margin: 0 0 20px 0;
+      font-weight: 700;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .admissions-modal-content p {
+      font-size: 1.3rem;
+      margin: 0 0 24px 0;
+      line-height: 1.6;
+      color: white;
+    }
+
+    .admissions-modal-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: #fffbcc;
+      text-decoration: underline;
+    }
+
+    .admissions-modal-link:hover {
+      opacity: 0.9;
+    }
+
+    .admissions-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 35px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      line-height: 1;
+    }
+
+    .admissions-modal-close:hover {
+      transform: scale(1.2);
+    }
+
+    .admissions-modal-button {
+      background: white;
+      color: #2359b6;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .admissions-modal-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* Paper fold style animations for the admission popup */
+    @keyframes paperOpen {
+      0% {
+        opacity: 0;
+        transform: rotateX(-90deg) scale(0.7);
+      }
+      60% {
+        opacity: 1;
+        transform: rotateX(12deg) scale(1.02);
+      }
+      100% {
+        opacity: 1;
+        transform: rotateX(0deg) scale(1);
+      }
+    }
+
+    @keyframes paperClose {
+      0% {
+        opacity: 1;
+        transform: rotateX(0deg) scaleX(1) scaleY(1);
+      }
+      50% {
+        opacity: 0.9;
+        transform: rotateX(15deg) scaleX(0.9) scaleY(0.7);
+      }
+      100% {
+        opacity: 0;
+        transform: rotateX(90deg) scaleX(0.6) scaleY(0.1);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admissions-modal-content {
+        padding: 40px 30px;
+        max-width: 90%;
+      }
+
+      .admissions-modal-content h2 {
+        font-size: 2rem;
+      }
+
+      .admissions-modal-content p {
+        font-size: 1.1rem;
+      }
+    }
 </style>
  
 
   <link rel='stylesheet' href='../mobile-fixes.css'>
-  <link rel='stylesheet' href='../cursor-hide.css'>
+  <link rel='stylesheet' href='../css/school-faq-chatbot.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-ieVFO2R0j20g35yLOIjoiqlc7qwvd+wd+TLPu8=" crossorigin="anonymous" referrerpolicy="no-referrer-when-downgrade">
 </head>
 
 <body>
@@ -779,8 +959,8 @@ color:#031844;
 
     <div class="mainDiv">
       <section class="mainSec reveal reveal-down">
-        <br>
-       <h1>Welcome to Bharathi Kids Kshethralaya</h1>
+      <br><br>
+       <h1>Welcome to Bharathi Kids Kshethralaya</h1><br>
         <p>Where Excellence meets Education</p>
       </section>
     </div>
@@ -1002,7 +1182,7 @@ endurance and resilience, to work their words into significant achievements.
             <img src="img/computer_lab.jpeg" alt="Computer Lab" onclick="location.href='infrastructure.html'" style="cursor: pointer;">
           </div>
           <div class="c-item item-3 reveal-blur delay-400">
-            <img src="img/chem_lab.jpg" alt="Chemistry Lab" onclick="location.href='infrastructure.html'" style="cursor: pointer;">
+            <img src="img/chem_lab.png" alt="Chemistry Lab" onclick="location.href='infrastructure.html'" style="cursor: pointer;">
           </div>
           <div class="c-item item-4 reveal-blur delay-600">
             <img src="img/phy_lab.jpg" alt="Physics Lab" onclick="location.href='infrastructure.html'" style="cursor: pointer;">
@@ -1257,7 +1437,7 @@ endurance and resilience, to work their words into significant achievements.
   <section class="stats-section reveal" style="background-color: #fffdeb;">
     <div class="stats-grid">
       <div class="stat-item">
-        <span class="stat-number text-yellow" data-target="25" data-suffix="+">0</span>
+        <span class="stat-number text-yellow" data-target="20" data-suffix="+">0</span>
         <span class="stat-label">Years of Excellence</span>
       </div>
       <div class="stat-item">
@@ -1302,12 +1482,12 @@ endurance and resilience, to work their words into significant achievements.
 
       <!-- Facilities Icon Cards Grid -->
       <div
-        style="max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
+        style="max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;">
 
         <!-- Image 1: Biology Lab -->
         <div style="text-align: center; padding: 30px;">
           <div style="border: 4px solid #2359b6; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(35, 89, 182, 0.3); margin-bottom: 20px;">
-            <img src="img/bio_lab.jpg" alt="Biology Lab" onclick="location.href='infrastructure.html'" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;">
+            <img src="img/bio_lab.png" alt="Biology Lab" onclick="location.href='infrastructure.html'" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;">
           </div>
           <h3 style="color: #2359b6; font-size: 1.1rem; margin: 0 0 15px 0; font-weight: 700;">Biology Lab</h3>
           <p style="color: #666; font-size: 0.9rem; line-height: 1.6; margin: 0;">
@@ -1329,11 +1509,21 @@ endurance and resilience, to work their words into significant achievements.
         <!-- Image 3: Chemistry Lab -->
         <div style="text-align: center; padding: 30px;">
           <div style="border: 4px solid #2359b6; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(35, 89, 182, 0.3); margin-bottom: 20px;">
-            <img src="img/chem_lab2.jpg" alt="Chemistry Lab" onclick="location.href='infrastructure.html'" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;">
+            <img src="img/chem_lab.png" alt="Chemistry Lab" onclick="location.href='infrastructure.html'" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;">
           </div>
           <h3 style="color: #2359b6; font-size: 1.1rem; margin: 0 0 15px 0; font-weight: 700;">Chemistry Lab</h3>
           <p style="color: #666; font-size: 0.9rem; line-height: 1.6; margin: 0;">
             Modern chemistry laboratory with safety equipment and comprehensive chemical supplies.
+          </p>
+        </div>
+
+        <div style="text-align: center; padding: 30px;">
+          <div style="border: 4px solid #f9dc5d; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(249, 220, 93, 0.3); margin-bottom: 20px;">
+            <img src="img/bus.JPG" alt="Transport" onclick="location.href='infrastructure.html'" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer;">
+          </div>
+          <h3 style="color: #f9dc5d; font-size: 1.1rem; margin: 0 0 15px 0; font-weight: 700;">Transport</h3>
+          <p style="color: #666; font-size: 0.9rem; line-height: 1.6; margin: 0;">
+            Safe, reliable school transport with trained drivers and GPS-enabled buses.
           </p>
         </div>
       </div>
@@ -1446,11 +1636,11 @@ endurance and resilience, to work their words into significant achievements.
       </div>
 
   <script src="js/index.js"></script>
-  <script src="https://kit.fontawesome.com/ba1e04a511.js" crossorigin="anonymous"></script>
-  <script src="../js/video-carousel.js"></script>
-  <script src="../js/book-cursor.js"></script>
-  <script src="../js/counter.js"></script>
-  </main>
+<script src="https://kit.fontawesome.com/ba1e04a511.js" crossorigin="anonymous"></script>
+<script src="../js/video-carousel.js"></script>
+<script src="../js/counter.js"></script>
+<script src="../js/school-faq-chatbot.js" defer></script>
+</main>
   <footer class="footer">
     <div class="footer-container">
 
@@ -1464,11 +1654,15 @@ endurance and resilience, to work their words into significant achievements.
 
         <p class="footer-address">
           📍 Bharathi Kids Kshethralaya<br>
-          Mangalam to Avinashi Main Road , Avinashi - 641 654
+          No.7 , College Road , Konganagiri Bus Stop , Tirupur - 641602
         </p>
 
         <p class="footer-phone">
-          📞 +91 87540 91999
+          📞 0421-2208573 , 0421-2239299
+        </p>
+
+        <p class="footer-email">
+       MAIL : bharathikidskshethralaya@gmail.com
         </p>
       </div>
 
@@ -1503,12 +1697,87 @@ endurance and resilience, to work their words into significant achievements.
       <p style="color:white;">&copy; 2026 Bharathi kids Kshethralaya. All Rights Reserved.</p>
     </div>
   </footer>
+
+  <!-- Admissions Popup Modal -->
+  <div id="admissionsModal" class="admissions-modal">
+    <div class="admissions-modal-content">
+      <span class="admissions-modal-close" id="closeAdmissionsModal">&times;</span>
+      <h2>Admissions Open!</h2>
+      <p>
+        Admissions open for 2026-2027<br>
+        <a href="../admission-procedure.html" class="admissions-modal-link">View admission procedure</a>
+      </p>
+      <button class="admissions-modal-button" id="closeAdmissionsButton">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    // Admissions Popup Functionality - Auto show on page load
+    function showAdmissionsPopup() {
+      const modal = document.getElementById('admissionsModal');
+      if (!modal) return;
+      modal.classList.remove('closing');
+      modal.classList.add('active');
+
+      const content = modal.querySelector('.admissions-modal-content');
+      if (content) {
+        content.classList.remove('closing');
+        // restart animation
+        content.classList.remove('opening');
+        void content.offsetWidth;
+        content.classList.add('opening');
+      }
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeAdmissionsModal() {
+      const modal = document.getElementById('admissionsModal');
+      if (!modal) return;
+
+      const content = modal.querySelector('.admissions-modal-content');
+      if (content) {
+        content.classList.remove('opening');
+        content.classList.add('closing');
+      }
+
+      modal.classList.add('closing');
+
+      // Wait for fold animation to finish before hiding
+      setTimeout(() => {
+        modal.classList.remove('active', 'closing');
+        if (content) {
+          content.classList.remove('closing');
+        }
+        document.body.style.overflow = ''; // Restore scrolling
+      }, 450);
+    }
+
+    // Event listeners
+    document.getElementById('closeAdmissionsModal').addEventListener('click', closeAdmissionsModal);
+    document.getElementById('closeAdmissionsButton').addEventListener('click', closeAdmissionsModal);
+
+    // Close modal when clicking outside the content
+    document.getElementById('admissionsModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAdmissionsModal();
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('admissionsModal');
+        if (modal.classList.contains('active')) {
+          closeAdmissionsModal();
+        }
+      }
+    });
+
+    // Show popup automatically when page loads
+    window.addEventListener('load', function() {
+      // Small delay to ensure page is fully loaded
+      setTimeout(showAdmissionsPopup, 500);
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-

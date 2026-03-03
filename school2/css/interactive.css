@@ -16,7 +16,7 @@
     min-width: 280px;
     text-align: center;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
-    cursor: default;
+    cursor: none;
     position: relative;
     overflow: hidden;
 }
