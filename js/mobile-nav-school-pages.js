@@ -10,7 +10,7 @@
 
   const path = (window.location.pathname || '').toLowerCase();
   const schoolName = path.includes('/school1/')
-    ? 'Bharathi Vidhya Kendra'
+    ? 'Bharathi Vidhya Kendhra'
     : path.includes('/school2/')
       ? 'Bharathi Kids Kshethralaya'
       : 'School Menu';

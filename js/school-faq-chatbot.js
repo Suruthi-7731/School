@@ -4,7 +4,7 @@
  */
 
 class SchoolFAQBot {
-    constructor(schoolName = 'Bharathi Vidhyaa Kendra') {
+    constructor(schoolName = 'Bharathi Vidhyaa Kendhra') {
         this.schoolName = schoolName;
         this.isOpen = false;
         this.messages = [];
@@ -14,7 +14,7 @@ class SchoolFAQBot {
 
     getFAQData(schoolName) {
         const faqDatabase = {
-            'Bharathi Vidhyaa Kendra': {
+            'Bharathi Vidhyaa Kendhra': {
                 general: [
                     {
                         question: "What are the school timings?",
@@ -62,7 +62,7 @@ class SchoolFAQBot {
                     }
                 ]
             },
-            'Bharathi Kids Kshethralaya': {
+            'Bharathi kids Kshethralaya': {
                 general: [
                     {
                         question: "What are the school timings?",
@@ -112,7 +112,7 @@ class SchoolFAQBot {
             }
         };
         
-        return faqDatabase[schoolName] || faqDatabase['Bharathi Vidhyaa Kendra'];
+        return faqDatabase[schoolName] || faqDatabase['Bharathi Vidhyaa Kendhra'];
     }
 
     init() {
@@ -632,9 +632,9 @@ document.addEventListener('DOMContentLoaded', () => {
                      window.location.pathname === '' ||
                      window.location.pathname === '/index.html';
     
-    let schoolName = 'Bharathi Vidhyaa Kendra';
+    let schoolName = 'Bharathi Vidhyaa Kendhra';
     if (isSchool2) {
-        schoolName = 'Bharathi Kids Kshethralaya';
+        schoolName = 'Bharathi kids Kshethralaya';
     }
     
     // Debug logging
